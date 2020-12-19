@@ -62,10 +62,63 @@ public class Jikkou01_MakeXML{
 				for(int i=0;i<curList.size();i++){
 					if(i==curList.size()-1){
 						parentElement.appendChild(doc.createTextNode(curList.get(i)));
+					}else if(curList.get(i).matches(".*:(.+=.+,)*.+=.+")){	//attribute�̎擾
+						String[] word1=curList.get(i).split(":");
+						String[] attributeList=word1[1].split(",");
+						//System.out.println(parentElement.getTagName()+","+word1[0]);
+						
+						boolean existFlag=false;
+						NodeList childList=parentElement.getElementsByTagName(word1[0]);
+						//System.out.println(childList.getLength());
+						if(childList.getLength()>0){
+							for(int j = 0; j < childList.getLength(); j++) {
+								Node node = childList.item(j);
+								Element childElement = (Element)node;
+								//System.out.println(childElement.getTagName());
+								existFlag=true;
+								for(String curStr:attributeList){
+									String[] word2=curStr.split("=");
+									if(!childElement.getAttribute(word2[0]).equals(word2[1])){
+										existFlag=false;
+										break;
+									}
+								}
+								
+								if(existFlag){
+									parentElement=childElement;
+									break;
+								}
+							}
+						}
+						
+						if(!existFlag){
+							Element curElement = doc.createElement(word1[0]);
+							for(String curStr:attributeList){
+								String[] word2=curStr.split("=");
+								curElement.setAttribute(word2[0],word2[1]);
+							}
+							parentElement.appendChild(curElement);
+							parentElement=curElement;
+						}
 					}else{
-						Element curElement=doc.createElement(curList.get(i));
-						parentElement.appendChild(curElement);
-						parentElement=curElement;
+						boolean existFlag=false;
+						NodeList childList=parentElement.getElementsByTagName(curList.get(i));
+						if(childList.getLength()>0){
+							for(int j = 0; j < childList.getLength(); j++) {
+								Node node = childList.item(j);
+								Element childElement = (Element)node;
+								if(childElement.getAttributes().getLength()==0){
+									existFlag=true;
+									parentElement=childElement;
+									break;
+								}
+							}
+						}
+						if(!existFlag){
+							Element curElement=doc.createElement(curList.get(i));
+							parentElement.appendChild(curElement);
+							parentElement=curElement;
+						}
 					}
 				}
 			}

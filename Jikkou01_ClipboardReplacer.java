@@ -17,8 +17,29 @@ public class Jikkou01_ClipboardReplacer{
 			clipBoardStr = (String)object.getTransferData(DataFlavor.stringFlavor);
 		}
 		
-		CSVReplacer csvr=new CSVReplacer();
-		clipBoardStr=csvr.replace(clipBoardStr);
+		//有効リストの読み込み
+		HashSet<String> activeSet=new HashSet<String>();
+		{
+			BufferedReader br = new BufferedReader(new FileReader("ReplacerSetting.txt"));
+			//BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "EUC-JP"));
+			String line;
+			while ((line = br.readLine()) != null) {
+				//System.out.println(line);
+				activeSet.add(line);
+			}
+			br.close();
+		}
+		
+		//ここから書くReplacerの動作を開始する
+		if(activeSet.contains("CSVReplacer")){
+			CSVReplacer csvr=new CSVReplacer();
+			clipBoardStr=csvr.replace(clipBoardStr);
+		}
+		if(activeSet.contains("XMLReplacer")){
+			XMLReplacer xmlr=new XMLReplacer();
+			clipBoardStr=xmlr.replace(clipBoardStr);
+		}
+		
 		
 		//クリップボードのセット
 		//clipBoardStr,clipboard⇒クリップボード
