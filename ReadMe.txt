@@ -19,3 +19,6 @@ ReplaceMap.txt‚Éƒ^ƒu‹æØ‚è‚Å‘‚©‚ê‚½•¶Žš—ñ‚É]‚Á‚Ä
 <repeat:#A5-10>
 </repeat:#A5-10>
 #A‚Í3Œ…0–„‚ß‚ÅŒJ‚è•Ô‚³‚ê‚é
+
+ZListReplacer
+<list>
