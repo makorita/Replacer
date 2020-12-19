@@ -23,16 +23,21 @@ public class MultiReplacer{
 			if(!curStr.matches("^.+\t.+(\t.+)*\t*"))continue;
 			String[] word=curStr.split("\t");
 			if(word.length==3 && word[2].equals("regular")){
+				//System.out.println("regular");
 				Pattern p=Pattern.compile(word[0],Pattern.MULTILINE);
 				Matcher m=p.matcher(returnStr);
 				returnStr=m.replaceAll(word[1]);
 			}else{
-				Pattern p=Pattern.compile(word[0]);
-				Matcher m=p.matcher(returnStr);
-				while (m.find()) {
-					String matched = m.group();
-					returnStr=returnStr.replace(matched,word[1]);
+				//System.out.println("normal");
+				String editStr=null;
+				String[] word2=returnStr.split("\n");
+				for(String curStr2:word2){
+					curStr2=curStr2.replace(word[0],word[1]);
+					if(editStr==null)editStr=curStr2+"\n";
+					else editStr+=curStr2+"\n";
 				}
+				
+				returnStr=editStr;
 			}
 		}
 		

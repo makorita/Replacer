@@ -43,7 +43,14 @@ public class Jikkou01_ClipboardReplacer{
 			MultiReplacer multir=new MultiReplacer();
 			clipBoardStr=multir.replace(clipBoardStr);
 		}
-		
+		if(activeSet.contains("Repeater")){
+			Repeater rep=new Repeater();
+			clipBoardStr=rep.replace(clipBoardStr);
+		}
+		if(activeSet.contains("ListReplacer")){
+			ListReplacer listr=new ListReplacer();
+			clipBoardStr=listr.replace(clipBoardStr);
+		}
 		
 		//クリップボードのセット
 		//clipBoardStr,clipboard⇒クリップボード
