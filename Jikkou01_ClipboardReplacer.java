@@ -39,6 +39,10 @@ public class Jikkou01_ClipboardReplacer{
 			XMLReplacer xmlr=new XMLReplacer();
 			clipBoardStr=xmlr.replace(clipBoardStr);
 		}
+		if(activeSet.contains("MultiReplacer")){
+			MultiReplacer multir=new MultiReplacer();
+			clipBoardStr=multir.replace(clipBoardStr);
+		}
 		
 		
 		//クリップボードのセット
