@@ -60,10 +60,14 @@ public class Jikkou01_MakeXML{
 			for(LinkedList<String> curList:inputList){
 				Element parentElement=rootElement;
 				for(int i=0;i<curList.size();i++){
+					String tmpStr=curList.get(i);
+					tmpStr=normalize(tmpStr);
+					
 					if(i==curList.size()-1){
-						parentElement.appendChild(doc.createTextNode(curList.get(i)));
-					}else if(curList.get(i).matches(".*:(.+=.+,)*.+=.+")){	//attribute‚ÌŽæ“¾
-						String[] word1=curList.get(i).split(":");
+						parentElement.appendChild(doc.createTextNode(tmpStr));
+					}else if(tmpStr.matches(".*:(.+=.+,)*.+=.+")){	//attribute‚ÌŽæ“¾
+						
+						String[] word1=tmpStr.split(":");
 						String[] attributeList=word1[1].split(",");
 						//System.out.println(parentElement.getTagName()+","+word1[0]);
 						
@@ -102,7 +106,7 @@ public class Jikkou01_MakeXML{
 						}
 					}else{
 						boolean existFlag=false;
-						NodeList childList=parentElement.getElementsByTagName(curList.get(i));
+						NodeList childList=parentElement.getElementsByTagName(tmpStr);
 						if(childList.getLength()>0){
 							for(int j = 0; j < childList.getLength(); j++) {
 								Node node = childList.item(j);
@@ -115,7 +119,7 @@ public class Jikkou01_MakeXML{
 							}
 						}
 						if(!existFlag){
-							Element curElement=doc.createElement(curList.get(i));
+							Element curElement=doc.createElement(tmpStr);
 							parentElement.appendChild(curElement);
 							parentElement=curElement;
 						}
@@ -134,5 +138,21 @@ public class Jikkou01_MakeXML{
 
 			tf.transform(new DOMSource(doc), new StreamResult("tempDB.xml"));
 		}
+	}
+	
+	static String normalize(String originalStr){
+		String returnStr=originalStr;
+		returnStr=returnStr.replace("‡@","1");
+		returnStr=returnStr.replace("‡A","2");
+		returnStr=returnStr.replace("‡B","3");
+		returnStr=returnStr.replace("‡C","4");
+		returnStr=returnStr.replace("‡D","5");
+		returnStr=returnStr.replace("‡E","6");
+		returnStr=returnStr.replace("‡F","7");
+		returnStr=returnStr.replace("‡G","8");
+		returnStr=returnStr.replace("‡H","9");
+		returnStr=returnStr.replace("‡I","10");
+		
+		return returnStr;
 	}
 }

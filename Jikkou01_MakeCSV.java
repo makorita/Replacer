@@ -23,8 +23,8 @@ public class Jikkou01_MakeCSV{
 			String word[]=clipBoardStr.split("\n");
 			for(String tmpStr:word){
 				//System.out.println(tmpStr);
-				clipBoardStr=clipBoardStr.replaceAll("\t",",");
-				wr.println(clipBoardStr);
+				tmpStr=tmpStr.replaceAll("\t",",");
+				wr.println(tmpStr);
 			}
 			wr.close();
 		}
