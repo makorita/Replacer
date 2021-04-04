@@ -75,13 +75,14 @@ public class Jikkou06_XMLReplace{
 			
 			//System.out.println(node.getNodeType());
 			Element childElement=(Element)node;
-			if(pathStr==null)pathStr=childElement.getTagName();
-			else pathStr+=sepStr+childElement.getTagName();
+			String curPath=null;
+			if(pathStr==null)curPath=childElement.getTagName();
+			else curPath=pathStr+sepStr+childElement.getTagName();
 			
 			if(childElement.hasAttribute("type") && childElement.getAttribute("type").equals("value")){
 				//System.out.println("bef:"+childElement.getTextContent()+":aft");
 				replaceMap.put(pathStr,childElement.getTextContent());
-			}else recursiveCheck(childElement,pathStr);
+			}else recursiveCheck(childElement,curPath);
 		}
 	}
 }

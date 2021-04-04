@@ -17,6 +17,8 @@ public class Jikkou06_AddXML{
 	*/
 	public static void main(String args[]) throws Exception{
 		String inputXML="ReplaceXML.xml";
+		String mode="Add";
+		if(args.length==1 && args[0].equals("replace"))mode="Replace";
 		
 		//クリップボードの読み込み
 		String clipBoardStr=null;
@@ -67,25 +69,37 @@ public class Jikkou06_AddXML{
 				for(int i=0;i<curList.size();i++){
 					String tmpStr=curList.get(i);
 					tmpStr=normalize(tmpStr);	//使用できない文字を置換する
+					//System.out.println(tmpStr);
 					
 					if(i==curList.size()-1){	//valueの生成
-						parentElement.appendChild(doc.createTextNode(tmpStr));
+						parentElement.setTextContent(tmpStr);
 						parentElement.setAttribute("type","value");
-					}else{
-						boolean existFlag=false;
+						//System.out.println("text:"+tmpStr);
+						
+					}else if(tmpStr.matches(".*:list")){
+						tmpStr=tmpStr.replaceAll(":list","");
 						NodeList childList=parentElement.getElementsByTagName(tmpStr);
-						if(childList.getLength()>0){
-							for(int j = 0; j < childList.getLength(); j++) {
-								Node node = childList.item(j);
-								Element childElement = (Element)node;
-								if(childElement.getAttributes().getLength()==0){
-									existFlag=true;
-									parentElement=childElement;
-									break;
-								}
+						int maxIndex=0;
+						for(int j = 0; j < childList.getLength(); j++) {
+							Node node = childList.item(j);
+							Element childElement = (Element)node;
+							if(childElement.getAttribute("id").length()>0){
+								int curInt=Integer.parseInt(childElement.getAttribute("id"));
+								if(curInt>maxIndex)maxIndex=curInt;
 							}
 						}
-						if(!existFlag){
+						
+						Element curElement=doc.createElement(tmpStr);
+						parentElement.appendChild(curElement);
+						parentElement=curElement;
+						curElement.setAttribute("id",String.valueOf(maxIndex+1));
+					}else{
+						NodeList childList=parentElement.getElementsByTagName(tmpStr);
+						if(childList.getLength()>0){
+							Node node = childList.item(0);
+							Element childElement = (Element)node;
+							parentElement=childElement;
+						}else{
 							Element curElement=doc.createElement(tmpStr);
 							parentElement.appendChild(curElement);
 							parentElement=curElement;
@@ -100,7 +114,7 @@ public class Jikkou06_AddXML{
 			TransformerFactory tfFactory = TransformerFactory.newInstance();
 			Transformer tf = tfFactory.newTransformer();
 
-			tf.setOutputProperty("indent", "yes");
+			//tf.setOutputProperty("indent", "yes");
 			tf.setOutputProperty("encoding", "UTF-8");
 
 			tf.transform(new DOMSource(doc), new StreamResult(inputXML));
