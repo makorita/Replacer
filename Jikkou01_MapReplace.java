@@ -28,6 +28,7 @@ public class Jikkou01_MapReplace{
 				//System.out.println(line);
 				
 				String[] word=line.split("\t");
+				if(word[1].equals("<del>") || word[1].equals("<delete>"))word[1]="";
 				if(word.length>=3 && word[2].equals("regular")){
 					//System.out.println("regular");
 					Pattern p=Pattern.compile(word[0],Pattern.MULTILINE);
