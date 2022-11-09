@@ -6,10 +6,10 @@ import java.awt.datatransfer.*;
 
 public class Jikkou01_MapReplace{
 	/*
-	’uŠ·ƒ}ƒbƒv‚ğŒ³‚ÉƒNƒŠƒbƒvƒ{[ƒh‚ğ’uŠ·‚·‚é
+	ç½®æ›ãƒãƒƒãƒ—ã‚’å…ƒã«ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã‚’ç½®æ›ã™ã‚‹
 	*/
 	public static void main(String args[]) throws Exception{
-		//ƒNƒŠƒbƒvƒ{[ƒh‚Ì“Ç‚İ‚İ
+		//ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã®èª­ã¿è¾¼ã¿
 		String clipBoardStr=null;
 		Clipboard clipboard=Toolkit.getDefaultToolkit().getSystemClipboard();
 		{
@@ -17,6 +17,8 @@ public class Jikkou01_MapReplace{
 			clipBoardStr = (String)object.getTransferData(DataFlavor.stringFlavor);
 		}
 		
+		//ã‚¨ãƒ³ãƒˆãƒªã®é™é †ã‚½ãƒ¼ãƒˆ
+		ArrayList<String> entryList=new ArrayList<String>();
 		{
 			BufferedReader br = new BufferedReader(new FileReader("ReplaceMap.txt"));
 			//BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "EUC-JP"));
@@ -25,10 +27,20 @@ public class Jikkou01_MapReplace{
 				if(!line.matches("^.+\t.+(\t.+)*\t*"))continue;
 				if(line.matches("^//.+"))continue;
 				if(line.matches("^;.+"))continue;
+				
+				entryList.add(line);
+			}
+			br.close();
+			Collections.sort(entryList, Collections.reverseOrder()); 
+		}
+		
+		{
+			for(String line:entryList) {
 				//System.out.println(line);
 				
 				String[] word=line.split("\t");
 				if(word[1].equals("<del>") || word[1].equals("<delete>"))word[1]="";
+				
 				if(word.length>=3 && word[2].equals("regular")){
 					//System.out.println("regular");
 					Pattern p=Pattern.compile(word[0],Pattern.MULTILINE);
@@ -51,11 +63,10 @@ public class Jikkou01_MapReplace{
 					clipBoardStr=editStr;
 				}
 			}
-			br.close();
 		}
 		
-		//ƒNƒŠƒbƒvƒ{[ƒh‚ÌƒZƒbƒg
-		//clipBoardStr,clipboardËƒNƒŠƒbƒvƒ{[ƒh
+		//ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã®ã‚»ãƒƒãƒˆ
+		//clipBoardStr,clipboardâ‡’ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰
 		{
 			StringSelection selection = new StringSelection(clipBoardStr);
 			clipboard.setContents(selection, null);
