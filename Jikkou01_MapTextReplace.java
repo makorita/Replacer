@@ -14,6 +14,14 @@ public class Jikkou01_MapTextReplace{
 	連番置換の複数行対応版
 	*/
 	public static void main(String args[]) throws Exception{
+		String dbFileName="ReplaceTable.xlsx";
+		String dbSheetName="変換テーブル";
+		if(args.length==1)dbFileName=args[0];
+		if(args.length==2){
+			dbFileName=args[0];
+			dbSheetName=args[1];
+		}
+		
 		//クリップボードの読み込み
 		String clipBoardStr=null;
 		Clipboard clipboard=Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -28,8 +36,8 @@ public class Jikkou01_MapTextReplace{
 		PrintWriter wr = new PrintWriter("ReplaceMap.txt", Charset.forName("UTF-8"));
 		{
 			
-			Workbook wb = WorkbookFactory.create(new FileInputStream("ReplaceTable.xlsx"));
-			Sheet sheet=wb.getSheet("変換テーブル");
+			Workbook wb = WorkbookFactory.create(new FileInputStream(dbFileName));
+			Sheet sheet=wb.getSheet(dbSheetName);
 			//変換列インデックスを取得
 			int aftColNum=-1;
 			Row headerRow=sheet.getRow(0);
